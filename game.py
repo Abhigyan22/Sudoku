@@ -9,25 +9,24 @@ HEIGHT = 500
 
 SCREEN = pygame.display.set_mode((WIDTH,HEIGHT))
 #Screen of the game
+pygame.display.set_caption("Sudoku") #Sets the title of the window
 
+LOGO = pygame.image.load('sudokuLogo.png')
+pygame.display.set_icon(LOGO) #Set the logo of the game
 
 def make_grid():
-    distance = WIDTH/9 #Distance between two lines in x axis
+    """Makes a 9x9 grid for the sudoku game"""
+    
+    distance = (WIDTH//9)+1 #Distance between two lines in x axis
     current_place = distance #Current x of line
+
     for line in range(1,9):
         if line%3==0:
             pygame.draw.line(SCREEN, (000,000,000), (current_place, 0), (current_place, HEIGHT), 3)
-            current_place+=distance
-        else:
-            pygame.draw.line(SCREEN, (000,000,000), (current_place, 0), (current_place, HEIGHT))
-            current_place+=distance
-    distance = HEIGHT/9 #Distance between two lines in y axis
-    current_place = distance #Current y of line
-    for line in range(1,9):
-        if line%3==0:
             pygame.draw.line(SCREEN, (000,000,000), (0, current_place), (WIDTH, current_place), 3)
             current_place+=distance
         else:
+            pygame.draw.line(SCREEN, (000,000,000), (current_place, 0), (current_place, HEIGHT))
             pygame.draw.line(SCREEN, (000,000,000), (0, current_place), (WIDTH, current_place))
             current_place+=distance
 
