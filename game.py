@@ -1,11 +1,11 @@
-from msilib.schema import Font
-from turtle import onclick
 import pygame
 import pygame_widgets as pw
 from pygame_widgets.button import Button
 from cells import *
 from sudoku import Sudoku
 from sys import exit
+from pygame_widgets.slider import Slider
+from pygame_widgets.textbox import TextBox
 
 pygame.init()
 #Initializing the module
@@ -32,6 +32,9 @@ def create_board(difficulty):
     for row in board:
         for num in row:
             cells[current_position].number = num
+            if cells[current_position].number:
+                cells[current_position].fill_by_user=False
+            
             current_position+=1
 
 def redraw_window():
@@ -60,7 +63,7 @@ def make_grid():
             pygame.draw.line(SCREEN, (000,000,000), (current_place, 0), (current_place, WIDTH)) #Horizontal
             pygame.draw.line(SCREEN, (000,000,000), (0, current_place), (HEIGHT, current_place)) #Vertical
             current_place+=distance
-
+    
 def start_game():
     global menu
     global game 
@@ -68,8 +71,12 @@ def start_game():
     game = True
 
 start_button = Button(SCREEN, 125, 350, 250, 80, text='Start', inactiveColour=(255,255,255), 
-hoverColour=(178, 247, 212), pressedColour=(200,200,200), onClick=start_game,
+hoverColour=(178, 247, 212), onClick=start_game,
 font=FONT, textHAlign='centre', textVAlign='centre')
+slider = Slider(SCREEN, 100, 170, 300, 30, min=1, max=9, step=1, handleRadius=30)
+output = TextBox(SCREEN, 235,300, 0, 0, font=FONT)
+
+output.disable() 
 
 def main():
     """The main function of the game"""
@@ -78,13 +85,18 @@ def main():
     menu = True
     game = False
     while menu:
-        for event in pygame.event.get(): #Event loop
+        events=pygame.event.get()
+        for event in events: #Event loop
             if event.type==pygame.QUIT: #If clicked on close
                 menu=False
         SCREEN.fill((255, 255, 255))
-        pw.update(pygame.event.get())
+        text=FONT.render('Select Difficulty', True, (0,0,0))
+        SCREEN.blit(text, (110,50))
+        pw.update(events)
         pygame.draw.rect(SCREEN, (0,0,0), pygame.Rect(125,350, 250, 80), 3)
         pygame.display.update()
+        output.setText(slider.getValue())
+    create_board(int(slider.getValue()))
     while game:
         redraw_window()
         pos = pygame.mouse.get_pos()
@@ -95,7 +107,10 @@ def main():
                                                         #Left mouse button
                 for cell in cells:
                     if cell.is_over(pos):
-                        cell.color = (0,200,0)
+                        if cell.fill_by_user:
+                            cell.color = (87,250,115)
+                        else:
+                            cell.color = (219, 59, 59)
                     else:
                         cell.color = (255,255,255)
 
@@ -103,5 +118,6 @@ def main():
         pygame.display.flip()
     pygame.quit()
     exit()
-create_board(6)
+
+
 main()
