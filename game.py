@@ -1,3 +1,5 @@
+from msilib.schema import Font
+from turtle import onclick
 import pygame
 import pygame_widgets as pw
 from pygame_widgets.button import Button
@@ -59,11 +61,30 @@ def make_grid():
             pygame.draw.line(SCREEN, (000,000,000), (0, current_place), (HEIGHT, current_place)) #Vertical
             current_place+=distance
 
+def start_game():
+    global menu
+    global game 
+    menu = False
+    game = True
+
+start_button = Button(SCREEN, 125, 350, 250, 80, text='Start', inactiveColour=(255,255,255), 
+hoverColour=(178, 247, 212), pressedColour=(200,200,200), onClick=start_game,
+font=FONT, textHAlign='centre', textVAlign='centre')
 
 def main():
     """The main function of the game"""
-    game = True
-
+    global menu
+    global game 
+    menu = True
+    game = False
+    while menu:
+        for event in pygame.event.get(): #Event loop
+            if event.type==pygame.QUIT: #If clicked on close
+                menu=False
+        SCREEN.fill((255, 255, 255))
+        pw.update(pygame.event.get())
+        pygame.draw.rect(SCREEN, (0,0,0), pygame.Rect(125,350, 250, 80), 3)
+        pygame.display.update()
     while game:
         redraw_window()
         pos = pygame.mouse.get_pos()
