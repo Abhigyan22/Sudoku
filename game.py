@@ -1,5 +1,6 @@
-from random import randrange
 import pygame
+import pygame_widgets as pw
+from pygame_widgets.button import Button
 from cells import *
 from sudoku import Sudoku
 from sys import exit
@@ -17,11 +18,13 @@ pygame.display.set_caption("Sudoku") #Sets the title of the window
 LOGO = pygame.image.load('IMG/sudokuLogo.png')
 pygame.display.set_icon(LOGO) #Set the logo of the game
 
-font = pygame.font.Font('FONT/baars.ttf', 50)
+FONT = pygame.font.Font('FONT/baars.ttf', 50)
 #Custom font
 
-def create_board():
-    puzzle =  Sudoku(3).difficulty(0.5)
+
+
+def create_board(difficulty):
+    puzzle =  Sudoku(3).difficulty(difficulty/10)
     board = puzzle.board
     current_position = 0
     for row in board:
@@ -35,7 +38,7 @@ def redraw_window():
     for cell in cells: 
         pygame.draw.rect(SCREEN, cell.color, pygame.Rect(cell.x,cell.y,cell.distance,cell.distance))
         if cell.number: #I.e it isnt a falsy value
-            text = font.render(str(cell.number), True, (000,000,000))
+            text = FONT.render(str(cell.number), True, (000,000,000))
             SCREEN.blit(text, (cell.x+18, cell.y))
         #Draws a rect with color of the cell
     make_grid() # Makes the grid
@@ -56,16 +59,17 @@ def make_grid():
             pygame.draw.line(SCREEN, (000,000,000), (0, current_place), (HEIGHT, current_place)) #Vertical
             current_place+=distance
 
-def game():
-    """The main part of the game"""
-    running = True
 
-    while running:
+def main():
+    """The main function of the game"""
+    game = True
+
+    while game:
         redraw_window()
         pos = pygame.mouse.get_pos()
         for event in pygame.event.get(): #Event loop
             if event.type==pygame.QUIT: #If clicked on close
-                running=False
+                game=False
             if event.type ==pygame.MOUSEBUTTONDOWN and event.button==1:
                                                         #Left mouse button
                 for cell in cells:
@@ -78,5 +82,5 @@ def game():
         pygame.display.flip()
     pygame.quit()
     exit()
-create_board()
-game()
+create_board(6)
+main()
