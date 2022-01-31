@@ -26,8 +26,13 @@ FONT = pygame.font.Font('FONT/baars.ttf', 50)
 
 
 def create_board(difficulty):
-    puzzle =  Sudoku(3).difficulty(difficulty/10)
-    board = puzzle.board
+    """This functions creates a sudoku game and assigns the numbers to the cells
+
+    Args:
+        difficulty (int): The difficulty of the game
+    """
+    puzzle =  Sudoku(3).difficulty(difficulty/10) #Sudoku puzzle
+    board = puzzle.board #puzzle in list version
     current_position = 0
     for row in board:
         for num in row:
@@ -43,8 +48,12 @@ def redraw_window():
     for cell in cells: 
         pygame.draw.rect(SCREEN, cell.color, pygame.Rect(cell.x,cell.y,cell.distance,cell.distance))
         if cell.number: #I.e it isnt a falsy value
-            text = FONT.render(str(cell.number), True, (000,000,000))
-            SCREEN.blit(text, (cell.x+18, cell.y))
+            if cell.fill_by_user:
+                text=FONT.render(str(cell.number), True, (57, 111, 237))
+                SCREEN.blit(text, (cell.x+18, cell.y))
+            else:
+                text = FONT.render(str(cell.number), True, (000,000,000))
+                SCREEN.blit(text, (cell.x+18, cell.y))
         #Draws a rect with color of the cell
     make_grid() # Makes the grid
      
@@ -65,6 +74,8 @@ def make_grid():
             current_place+=distance
     
 def start_game():
+    """Starts the game when clicked the start button
+    """
     global menu
     global game 
     menu = False
@@ -72,52 +83,82 @@ def start_game():
 
 start_button = Button(SCREEN, 125, 350, 250, 80, text='Start', inactiveColour=(255,255,255), 
 hoverColour=(178, 247, 212), onClick=start_game,
-font=FONT, textHAlign='centre', textVAlign='centre')
-slider = Slider(SCREEN, 100, 170, 300, 30, min=1, max=9, step=1, handleRadius=30)
-output = TextBox(SCREEN, 235,300, 0, 0, font=FONT)
+font=FONT, textHAlign='centre', textVAlign='centre') #The start button
 
-output.disable() 
+slider = Slider(SCREEN, 100, 170, 300, 30, min=1, max=9, step=1)
+#The slider
+
+output = TextBox(SCREEN, 235,300, 0, 0, font=FONT)
+#The output of the slider
+
+output.disable() #Disables typing in the output(TextBox)
+
+currently_selected = None #Currently selected cell
 
 def main():
     """The main function of the game"""
     global menu
     global game 
+    global currently_selected
     menu = True
     game = False
+
     while menu:
         events=pygame.event.get()
         for event in events: #Event loop
             if event.type==pygame.QUIT: #If clicked on close
                 menu=False
-        SCREEN.fill((255, 255, 255))
-        text=FONT.render('Select Difficulty', True, (0,0,0))
-        SCREEN.blit(text, (110,50))
-        pw.update(events)
+        SCREEN.fill((255, 255, 255)) #Fills the screen with white
+        text=FONT.render('Select Difficulty', True, (0,0,0)) 
+        SCREEN.blit(text, (110,50)) #Renders the text
+        pw.update(events) #Update all pygame_widgets 
         pygame.draw.rect(SCREEN, (0,0,0), pygame.Rect(125,350, 250, 80), 3)
-        pygame.display.update()
-        output.setText(slider.getValue())
-    create_board(int(slider.getValue()))
+        #The border for the start button
+        output.setText(slider.getValue()) #The value of the slider = value of TextBox
+        pygame.display.update() #Updates the screen
+    create_board(int(slider.getValue())) #creates a board with value of the slider as 
+    #difficulty
     while game:
-        redraw_window()
-        pos = pygame.mouse.get_pos()
+        redraw_window() #redraws window
+        pos = pygame.mouse.get_pos() #position of mouse
         for event in pygame.event.get(): #Event loop
             if event.type==pygame.QUIT: #If clicked on close
                 game=False
             if event.type ==pygame.MOUSEBUTTONDOWN and event.button==1:
                                                         #Left mouse button
-                for cell in cells:
-                    if cell.is_over(pos):
-                        if cell.fill_by_user:
-                            cell.color = (87,250,115)
+                for cell in cells: #each cell in list of all cells
+                    if cell.is_over(pos): #If mouse is over a particular cell
+                        currently_selected = cell
+                        if cell.fill_by_user: #If cell is to be filled by user
+                            cell.color = (87,250,115) #Greenish
                         else:
-                            cell.color = (219, 59, 59)
+                            cell.color = (219, 59, 59) #Red-ish 
                     else:
-                        cell.color = (255,255,255)
-
+                        cell.color = (255,255,255) #white
+            if event.type == pygame.KEYDOWN:
+                if currently_selected and currently_selected.fill_by_user: #If it is not none
+                    if event.key == pygame.K_1 or event.key == pygame.K_KP1:
+                        currently_selected.number = 1
+                    if event.key == pygame.K_2 or event.key == pygame.K_KP2:
+                        currently_selected.number = 2
+                    if event.key == pygame.K_3 or event.key == pygame.K_KP3:
+                        currently_selected.number = 3
+                    if event.key == pygame.K_4 or event.key == pygame.K_KP4:
+                        currently_selected.number = 4
+                    if event.key == pygame.K_5 or event.key == pygame.K_KP5:
+                        currently_selected.number = 5
+                    if event.key == pygame.K_6 or event.key == pygame.K_KP6:
+                        currently_selected.number = 6                                                                                                
+                    if event.key == pygame.K_7 or event.key == pygame.K_KP7:
+                        currently_selected.number = 7
+                    if event.key == pygame.K_8 or event.key == pygame.K_KP8:
+                        currently_selected.number = 8
+                    if event.key == pygame.K_9 or event.key == pygame.K_KP9:
+                        currently_selected.number = 19                                               
         pygame.display.update() #Updates the screen
         pygame.display.flip()
-    pygame.quit()
+    pygame.quit() 
     exit()
-
+    #If out of menu or game loop, then quits the game
 
 main()
