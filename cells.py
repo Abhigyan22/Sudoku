@@ -109,3 +109,13 @@ cells = [a1,a2,a3,a4,a5,a6,a7,a8,a9,
         g1,g2,g3,g4,g5,g6,g7,g8,g9,
         h1,h2,h3,h4,h5,h6,h7,h8,h9,
         i1,i2,i3,i4,i5,i6,i7,i8,i9,]
+
+box = [[a1,a2,a3,b1,b2,b3,c1,c2,c3],
+[d1,d2,d3,e1,e2,e3,f1,f2,f3],
+[g1,g2,g3,h1,h2,h3,i1,i2,i3],
+[a4,a5,a6,b4,b5,b6,c4,c5,c6],
+[d4,d5,d6,e4,e5,e6,f4,f5,f6],
+[g4,g5,g6,h4,h5,h6,i4,i5,i6],
+[a7,a8,a9,b7,b8,b9,c7,c8,c9],
+[d7,d8,d9,e7,e8,e9,f7,f8,f9],
+[g7,g8,g9,h7,h8,h9,i7,i8,i9]]

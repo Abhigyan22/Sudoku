@@ -44,9 +44,21 @@ def create_board(difficulty):
 
 def redraw_window():
     """Draws the parts of the window every frame"""
-    SCREEN.fill((255,255,255)) #Fills the screen with white (so that there is no black border)
+    SCREEN.fill((255,255,255)) #Fills the screen with white 
     for cell in cells: 
         pygame.draw.rect(SCREEN, cell.color, pygame.Rect(cell.x,cell.y,cell.distance,cell.distance))
+    if currently_selected:
+        for idx,_ in enumerate(box):
+            if currently_selected in box[idx]:
+                for cell in box[idx]:
+                    pygame.draw.rect(SCREEN,(255, 221, 153), pygame.Rect(cell.x,cell.y,cell.distance,cell.distance))
+                break
+
+                
+        pygame.draw.rect(SCREEN, (255, 221, 153), pygame.Rect(0,currently_selected.y,WIDTH,currently_selected.distance))
+        pygame.draw.rect(SCREEN, (255, 221, 153), pygame.Rect(currently_selected.x,0,currently_selected.distance,HEIGHT))
+        pygame.draw.rect(SCREEN, currently_selected.color, pygame.Rect(currently_selected.x,currently_selected.y,currently_selected.distance,currently_selected.distance))
+    for cell in cells:   
         if cell.number: #I.e it isnt a falsy value
             if cell.fill_by_user:
                 text=FONT.render(str(cell.number), True, (57, 111, 237))
