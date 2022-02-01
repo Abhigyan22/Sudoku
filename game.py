@@ -93,7 +93,7 @@ output = TextBox(SCREEN, 235,300, 0, 0, font=FONT)
 
 output.disable() #Disables typing in the output(TextBox)
 
-currently_selected = None #Currently selected cell
+currently_selected = None #Currently selected
 
 def main():
     """The main function of the game"""
@@ -154,7 +154,7 @@ def main():
                     if event.key == pygame.K_8 or event.key == pygame.K_KP8:
                         currently_selected.number = 8
                     if event.key == pygame.K_9 or event.key == pygame.K_KP9:
-                        currently_selected.number = 19                                               
+                        currently_selected.number = 9                                               
         pygame.display.update() #Updates the screen
         pygame.display.flip()
     pygame.quit() 
