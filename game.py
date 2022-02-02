@@ -1,3 +1,4 @@
+from operator import length_hint
 import pygame
 import pygame_widgets as pw
 from pygame_widgets.button import Button
@@ -47,17 +48,27 @@ def redraw_window():
     SCREEN.fill((255,255,255)) #Fills the screen with white 
     for cell in cells: 
         pygame.draw.rect(SCREEN, cell.color, pygame.Rect(cell.x,cell.y,cell.distance,cell.distance))
+    duplicates=[]
     if currently_selected:
         for idx,_ in enumerate(box):
             if currently_selected in box[idx]:
                 for cell in box[idx]:
                     pygame.draw.rect(SCREEN,(255, 221, 153), pygame.Rect(cell.x,cell.y,cell.distance,cell.distance))
+                    if cell.number == currently_selected.number and currently_selected.number != None:
+                        duplicates.append(cell)
                 break
 
-                
         pygame.draw.rect(SCREEN, (255, 221, 153), pygame.Rect(0,currently_selected.y,WIDTH,currently_selected.distance))
         pygame.draw.rect(SCREEN, (255, 221, 153), pygame.Rect(currently_selected.x,0,currently_selected.distance,HEIGHT))
         pygame.draw.rect(SCREEN, currently_selected.color, pygame.Rect(currently_selected.x,currently_selected.y,currently_selected.distance,currently_selected.distance))
+        print(len(duplicates))
+        if len(duplicates)>=2:
+            print("I am here")
+            for cell in duplicates:
+                cell.color = (200,60,60)
+                pygame.draw.rect(SCREEN, cell.color, pygame.Rect(cell.x,cell.y,cell.distance,cell.distance))
+        else:
+            currently_selected.color = (87,250,115)
     for cell in cells:   
         if cell.number: #I.e it isnt a falsy value
             if cell.fill_by_user:
@@ -142,8 +153,8 @@ def main():
                         currently_selected = cell
                         if cell.fill_by_user: #If cell is to be filled by user
                             cell.color = (87,250,115) #Greenish
-                        else:
-                            cell.color = (219, 59, 59) #Red-ish 
+                        # else:
+                        #     cell.color = (219, 59, 59) #Red-ish 
                     else:
                         cell.color = (255,255,255) #white
             if event.type == pygame.KEYDOWN: #If pressed a key
