@@ -10,8 +10,8 @@ class Cell:
     def is_over(self, pos):
         x_pos = pos[0]
         y_pos = pos[1]
-        if x_pos>self.x and x_pos<self.x+self.distance:
-            if y_pos>self.y and y_pos<self.y+self.distance:
+        if x_pos>=self.x and x_pos<=self.x+self.distance:
+            if y_pos>=self.y and y_pos<=self.y+self.distance:
                 return True 
         return False
 

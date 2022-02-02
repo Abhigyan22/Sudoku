@@ -68,7 +68,6 @@ def redraw_window():
                 SCREEN.blit(text, (cell.x+18, cell.y))
         #Draws a rect with color of the cell
     make_grid() # Makes the grid
-     
 def make_grid():
     """Makes a 9x9 grid for the sudoku game"""
     
@@ -147,8 +146,9 @@ def main():
                             cell.color = (219, 59, 59) #Red-ish 
                     else:
                         cell.color = (255,255,255) #white
-            if event.type == pygame.KEYDOWN:
+            if event.type == pygame.KEYDOWN: #If pressed a key
                 if currently_selected and currently_selected.fill_by_user: #If it is not none
+                    #The statements below checks if a number was pressed, if true assigns the number to the particular cell
                     if event.key == pygame.K_1 or event.key == pygame.K_KP1:
                         currently_selected.number = 1
                     if event.key == pygame.K_2 or event.key == pygame.K_KP2:
