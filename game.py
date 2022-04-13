@@ -32,7 +32,7 @@ def create_board(difficulty):
     Args:
         difficulty (int): The difficulty of the game
     """
-    puzzle =  Sudoku(3).difficulty(difficulty/10) #Sudoku puzzle
+    puzzle =  Sudoku(3).difficulty(difficulty/10) #Sudoku puzzle with 3x3 grid
     board = puzzle.board #puzzle in list version
     current_position = 0
     for row in board:
@@ -43,29 +43,33 @@ def create_board(difficulty):
             
             current_position+=1
 
+def highlight():
+    """It is used to highlight the cells of the box, row and column; and find duplicates
+    """
+    duplicates = []
+    list_of_collections = [box, row, column]
+    for collection in list_of_collections: 
+        for each_collection in collection:
+            if currently_selected in each_collection: #if currently selected cell is in the sub-set of a collection
+                for cell in each_collection: 
+                    cell.color = [255, 221, 153] #changes the color of all the cell in that row, box, column
+                    if cell.number == currently_selected.number and currently_selected.number != None:
+                        duplicates.append(cell)
+
+                break
+    return duplicates
+
 def redraw_window():
     """Draws the parts of the window every frame"""
     SCREEN.fill((255,255,255)) #Fills the screen with white 
     for cell in cells: 
         pygame.draw.rect(SCREEN, cell.color, pygame.Rect(cell.x,cell.y,cell.distance,cell.distance))
     duplicates=[]
-    if currently_selected:
-        for idx,_ in enumerate(box):
-            if currently_selected in box[idx]:
-                for cell in box[idx]:
-                    pygame.draw.rect(SCREEN,(255, 221, 153), pygame.Rect(cell.x,cell.y,cell.distance,cell.distance))
-                    if cell.number == currently_selected.number and currently_selected.number != None:
-                        duplicates.append(cell)
-                break
-
-        pygame.draw.rect(SCREEN, (255, 221, 153), pygame.Rect(0,currently_selected.y,WIDTH,currently_selected.distance))
-        pygame.draw.rect(SCREEN, (255, 221, 153), pygame.Rect(currently_selected.x,0,currently_selected.distance,HEIGHT))
-        pygame.draw.rect(SCREEN, currently_selected.color, pygame.Rect(currently_selected.x,currently_selected.y,currently_selected.distance,currently_selected.distance))
-        print(len(duplicates))
-        if len(duplicates)>=2:
-            print("I am here")
+    if currently_selected: #If user has selected any cell
+        duplicates = highlight()
+        if len(duplicates)>3: #It will always be 1 or more
             for cell in duplicates:
-                cell.color = (200,60,60)
+                cell.color = (200,60,60) #Red-ish color
                 pygame.draw.rect(SCREEN, cell.color, pygame.Rect(cell.x,cell.y,cell.distance,cell.distance))
         else:
             currently_selected.color = (87,250,115)
